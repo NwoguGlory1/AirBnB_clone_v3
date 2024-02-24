@@ -2,6 +2,9 @@
 """This module defines a class to manage file storage for hbnb clone"""
 import json
 
+classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
+        "Place": Place, "Review": Review, "State": State, "User": User}
+
 
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
@@ -79,7 +82,4 @@ class FileStorage:
 
     def count(self, cls=None):
         """ """ 
-        if cls:
-            return sum(1 for key in self.__objects if isinstance(self.__objects[key], cls))
-        else:
             return len(self.__objects)
