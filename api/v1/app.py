@@ -12,6 +12,7 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 """ registers the blueprint to app """
 
+
 @app.errorhandler(404)
 def not_found(error):
     """
@@ -20,6 +21,7 @@ def not_found(error):
     "error": "Not found" into a JSON response
     """
     return jsonify({"error": "Not found"}), 404
+
 
 @app.teardown_appcontext
 def teardown(exception):
