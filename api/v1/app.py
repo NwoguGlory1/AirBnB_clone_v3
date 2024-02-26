@@ -7,8 +7,19 @@ from os import getenv
 from models import storage
 
 app = Flask(__name__)
-app.register_blueprint(app_views)
+""" Creates an instance of class, Flask"""
 
+app.register_blueprint(app_views)
+""" registers the blueprint to app """
+
+@app.errorhandler(404)
+def not_found(error):
+    """
+    Function to handle the error
+    Returns  a JSON response, jsonify converts dictionary,
+    "error": "Not found" into a JSON response
+    """
+    return jsonify({"error": "Not found"}), 404
 
 @app.teardown_appcontext
 def teardown(exception):

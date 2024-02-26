@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Script for the index of the API""" 
+""" Script for the index of the API """
 
 from flask import jsonify
 from models import storage
@@ -18,6 +18,7 @@ def get_status():
     Function that executes if user accesses '/status'
     """
     return jsonify({"status": "OK"})
+
 
 @app_views.route('/api/v1/stats', methods=['GET'])
 def get_stats():
