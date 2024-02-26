@@ -31,6 +31,9 @@ def get_stats():
             'states': State,
             'users': User
             }
-    for key, value in objects.items():
-        objects[key] = storage.count(value)
-    return jsonify(objects)
+
+    objects_stat = {}
+
+    for object in objects:
+        objects_stat[object] = storage.count(object)
+    return jsonify(**objects_stat)
