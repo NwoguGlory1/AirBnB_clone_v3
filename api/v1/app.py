@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ App controller module """
 
-from flask import Flask
+from flask import Flask, jsonify
 from api.v1.views import app_views
 from os import getenv
 from models import storage
@@ -30,6 +30,7 @@ def not_found(error):
 
 
 if __name__ == '__main__':
+    """ Ensures that code runs only when executed directly """
     host = getenv('HBNB_API_HOST', '0.0.0.0')
     port = int(getenv('HBNB_API_PORT', 5000))
     app.run(host=host, port=port, threaded=True)
