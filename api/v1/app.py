@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-
 """ App controller module """
+
 from flask import Flask
 from api.v1.views import app_views
 from os import getenv
@@ -13,6 +13,11 @@ app.register_blueprint(app_views)
 """ registers the blueprint to app """
 
 
+@app.teardown_appcontext
+def teardown(exception):
+    """ calls the storage.close functionality """
+    storage.close()
+
 @app.errorhandler(404)
 def not_found(error):
     """
@@ -21,12 +26,6 @@ def not_found(error):
     "error": "Not found" into a JSON response
     """
     return jsonify({"error": "Not found"}), 404
-
-
-@app.teardown_appcontext
-def teardown(exception):
-    """ calls the storage.close functionality """
-    storage.close()
 
 
 if __name__ == '__main__':
