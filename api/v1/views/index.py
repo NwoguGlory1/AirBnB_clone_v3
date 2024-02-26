@@ -2,6 +2,8 @@
 """ Script for the index of the API """
 
 from flask import jsonify
+
+
 from models import storage
 from api.v1.views import app_views
 from models.amenity import Amenity
@@ -20,7 +22,7 @@ def get_status():
     return jsonify({"status": "OK"})
 
 
-@app_views.route('/api/v1/stats', methods=['GET'])
+@app_views.route('/stats', methods=['GET'])
 def get_stats():
     """ Function that executes if user accesses '/stats'"""
     objects = {
@@ -30,7 +32,7 @@ def get_stats():
             'reviews': Review,
             'states': State,
             'users': User
-            }
+    }
 
     objects_stat = {}
 
