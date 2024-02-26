@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+""" Script containing Flask web application API  """
+
+import os
 from flask import Flask, jsonify
 from models import storage
 from api.v1.views import app_views
@@ -6,9 +10,15 @@ app = Flask(__name__)
 """ Creates an instance of class, Flask"""
 
 app.register_blueprint(app_views)
+""" registers the blueprint to app """
 
 @app.errorhandler(404)
 def not_found(error):
+    """ 
+    Function to handle the error
+    Returns  a JSON response, jsonify converts dictionary,
+    "error": "Not found" into a JSON response
+    """
     return jsonify({"error": "Not found"}), 404
 
 @app.teardown_appcontext
