@@ -51,7 +51,12 @@ def add_new_user():
     if not add_user:
         abort(400, "Not a JSON")
     elif 'name' not in add_user:
-        abort(400, "Missing Name")
+        abort(400, "Missing name")
+    elif 'email' not in add_user:
+        abort(400, "Missing email")
+    elif 'password' not in add_user:
+        abort(400, "Missing password")
+
     else:
         new_user = User(**add_user)
         storage.new(new_user)
@@ -68,11 +73,9 @@ def update_user(user_id):
     put_data = request.get_json()
     if not put_data:
         abort(400, "Not a JSON")
-    put_data.pop('id', None)
-    put_data.pop('created_at', None)
-    put_data.pop('updated_at', None)
 
     for key, value in put_data.items():
-        setattr(ret_state, key, value)
+        if key not in ['id', 'email', 'created_at', 'updated_at']:
+            setattr(ret_user, key, value)
     storage.save()
     return jsonify(to_dict(ret_user)), 200
