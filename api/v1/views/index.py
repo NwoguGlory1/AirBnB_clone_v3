@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ Script for the index of the API """
-
 from flask import jsonify
 
 
@@ -32,10 +31,7 @@ def get_stats():
             'reviews': Review,
             'states': State,
             'users': User
-    }
-
-    objects_stat = {}
-
-    for object in objects:
-        objects_stat[object] = storage.count(object)
-    return jsonify(**objects_stat)
+            }
+    for key, value in objects.items():
+        objects[key] = storage.count(value)
+    return jsonify(objects)
