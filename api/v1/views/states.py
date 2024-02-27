@@ -51,7 +51,7 @@ def add_new_state():
     if not add_state:
         abort(400, "Not a JSON")
     elif 'name' not in add_state:
-        abort(400, "Missing Name")
+        abort(400, "Missing name")
     else:
         new_state = State(**add_state)
         storage.new(new_state)

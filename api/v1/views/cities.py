@@ -59,7 +59,7 @@ def add_new_city(state_id):
     if not add_city:
         abort(400, "Not a JSON")
     elif 'name' not in add_city:
-        abort(400, "Missing Name")
+        abort(400, "Missing name")
     else:
         new_city = City(**add_city)
         setattr(new_city, "state_id", state_id)
