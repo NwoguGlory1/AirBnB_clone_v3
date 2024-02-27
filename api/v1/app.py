@@ -3,14 +3,16 @@
 
 from flask import Flask, jsonify
 from api.v1.views import app_views
+from flask_cors import CORS
 from os import getenv
 from models import storage
 
 app = Flask(__name__)
 """ Creates an instance of class, Flask"""
 
-app.register_blueprint(app_views)
+gpp.register_blueprint(app_views)
 """ registers the blueprint to app """
+CORS(app, resources {r"/*" {"origins": "0.0.0.0"}})
 
 
 @app.teardown_appcontext
