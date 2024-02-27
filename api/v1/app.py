@@ -10,9 +10,9 @@ from models import storage
 app = Flask(__name__)
 """ Creates an instance of class, Flask"""
 
-gpp.register_blueprint(app_views)
+app.register_blueprint(app_views)
 """ registers the blueprint to app """
-CORS(app, resources {r"/*" {"origins": "0.0.0.0"}})
+CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
 
 @app.teardown_appcontext
