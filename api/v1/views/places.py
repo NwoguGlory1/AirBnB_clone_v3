@@ -68,7 +68,7 @@ def add_new_place(city_id):
         abort(400, "Missing user_id")
     else:
         new_place = Place(**add_place)
-        setattr(new_place, "city_id", state_id)
+        setattr(new_place, "city_id", city_id)
         storage.new(new_city)
         storage.save()
         return jsonify(to_dict(new_city)), 201
