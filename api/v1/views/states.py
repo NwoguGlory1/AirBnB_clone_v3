@@ -66,8 +66,8 @@ def update_state(state_id):
     if ret_state is None:
         abort(404)
     put_data = request.get_json()
-    if not put_data:
-        abort(400, "Not a JSON")
+    if put_data is None or not isinstance(put_data, dict):
+        abort(400, description="Not a JSON")
     put_data.pop('id', None)
     put_data.pop('created_at', None)
     put_data.pop('updated_at', None)

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ App controller module """
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response
 from api.v1.views import app_views
 from flask_cors import CORS
 from os import getenv
@@ -30,6 +30,14 @@ def not_found(error):
     """
     return jsonify({"error": "Not found"}), 404
 
+
+@app.errorhandler(400)
+def other_400_error(error):
+    """
+    Function to handle other custom 400 errors
+    Returns a JSON response, jsonify converts dictionary
+    """
+    return make_response(jsonify({"error": error.description}), 400)
 
 if __name__ == '__main__':
     """ Ensures that code runs only when executed directly """
