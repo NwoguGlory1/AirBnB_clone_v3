@@ -3,9 +3,8 @@
 
 from flask import Flask, make_response, jsonify, abort, request
 from models import storage
-from models.place import Place
+from models.state import State
 from models.city import City
-from models.user import User
 from . import app_views
 
 
@@ -14,78 +13,76 @@ def to_dict(obj):
     return obj.to_dict()
 
 
-@app_views.route('/cities/<city_id>/places',
+@app_views.route('/states/<state_id>/cities',
                  methods=['GET'], strict_slashes=False)
-def get_places(state_id):
-    """ retrieves the list of all place object of a city """
+def get_cities(state_id):
+    """ retrieves the list of all cities object of a state """
+    ret_state = storage.get(State, state_id)
+    if ret_state is None:
+        abort(404)
+    cities = []
+    for city in ret_state.cities:
+        cities_dic = to_dict(city)
+        cities.append(cities_dic)
+    return jsonify(cities)
+
+
+@app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
+def get_city(city_id):
+    """ retreives a city with the city_id """
     ret_city = storage.get(City, city_id)
     if ret_city is None:
         abort(404)
-    places = []
-    for place in ret_city.places:
-        places_dic = to_dict(place)
-        places.append(places_dic)
-    return jsonify(places)
+    return jsonify(to_dict(ret_city))
 
 
-@app_views.route('/places/<place_id>', methods=['GET'], strict_slashes=False)
-def get_place(place_id):
-    """ retreives a place with the place_id """
-    ret_place = storage.get(Place, place_id)
-    if ret_place is None:
-        abort(404)
-    return jsonify(to_dict(ret_place))
-
-
-@app_views.route('/places/<place_id>', methods=['DELETE'],
+@app_views.route('/cities/<city_id>', methods=['DELETE'],
                  strict_slashes=False)
-def delete_place(place_id):
-    """ deletes a place with the given place_id """
-    ret_place = storage.get(Place, place_id)
-    if ret_place is None:
+def delete_city(city_id):
+    """ deletes a city with the given state_id """
+    ret_city = storage.get(City, city_id)
+    if ret_city is None:
         abort(404)
-    storage.delete(ret_place)
+    storage.delete(ret_city)
     storage.save()
     return jsonify({}), 200
 
 
-@app_views.route('/cities/<city_id>/places',
+@app_views.route('/states/<state_id>/cities',
                  methods=['POST'], strict_slashes=False)
-def add_new_place(city_id):
-    """ adds a new place to the given city_id """
-    ret_city = storage.get(City, city_id)
-    if ret_city is None:
+def add_new_city(state_id):
+    """ adds a new city to the given state_id """
+    ret_state = storage.get(State, state_id)
+    if ret_state is None:
         abort(404)
-    add_place = request.get_json()
-    user = storage.get(User, add_place['user_id'])
-    if not add_place:
+    add_city = request.get_json()
+    if not add_city:
         abort(400, "Not a JSON")
-    elif not user:
-        abort(404)
-    elif 'name' not in add_place:
+    elif 'name' not in add_city:
         abort(400, "Missing name")
-    elif 'user_id' not in add_place:
-        abort(400, "Missing user_id")
     else:
-        new_place = Place(**add_place)
-        setattr(new_place, "city_id", city_id)
+        new_city = City(**add_city)
+        setattr(new_city, "state_id", state_id)
         storage.new(new_city)
         storage.save()
         return jsonify(to_dict(new_city)), 201
 
 
-@app_views.route('/places/<place_id>', methods=['PUT'], strict_slashes=False)
-def update_places(place_id):
-    """ updates a place value of a given place id """
-    ret_place = storage.get(Place, place_id)
-    if ret_place is None:
+@app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
+def update_cities(city_id):
+    """ updates a city value of a given city id """
+    ret_city = storage.get(City, city_id)
+    if ret_city is None:
         abort(404)
     put_data = request.get_json()
     if not put_data:
         abort(400, "Not a JSON")
+    put_data.pop('id', None)
+    put_data.pop('created_at', None)
+    put_data.pop('updated_at', None)
+    put_data.pop('state_id', None)
 
     for key, value in put_data.items():
-        if key not in ['id', 'user_id', 'city_id', 'created_at', 'updated_at']:
-            setattr(ret_place, key, value)
+        setattr(ret_city, key, value)
     storage.save()
-    return jsonify(to_dict(ret_place)), 200
+    return jsonify(to_dict(ret_state)), 200

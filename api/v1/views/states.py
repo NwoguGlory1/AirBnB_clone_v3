@@ -49,9 +49,9 @@ def add_new_state():
     """ adds a new state using with state name """
     add_state = request.get_json()
     if not add_state:
-        abort(400, "Not a JSON")
+        abort(400, description="Not a JSON")
     elif 'name' not in add_state:
-        abort(400, "Missing name")
+        abort(400, description="Missing name")
     else:
         new_state = State(**add_state)
         storage.new(new_state)

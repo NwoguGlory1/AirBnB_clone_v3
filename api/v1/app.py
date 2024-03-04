@@ -2,6 +2,7 @@
 """ App controller module """
 
 from flask import Flask, jsonify, make_response
+from werkzeug.exceptions import default_exceptions
 from api.v1.views import app_views
 from flask_cors import CORS
 from os import getenv
@@ -38,6 +39,7 @@ def other_400_error(error):
     Returns a JSON response, jsonify converts dictionary
     """
     return make_response(jsonify({"error": error.description}), 400)
+
 
 if __name__ == '__main__':
     """ Ensures that code runs only when executed directly """
